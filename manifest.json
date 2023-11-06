@@ -3,8 +3,11 @@
   "name": "Ethical Extension",
   "description": "An extension which determines if the current link is ethical or not",
   "version": "1.0",
+  "permissions": ["activeTab"],
+  "background": {
+    "service_worker": "service-worker.js"
+  },
   "action": {
-    "default_popup": "hello.html",
     "default_icon": "hello_extensions.png"
   }
 }
