@@ -1,12 +1,15 @@
-chrome.runtime.onInstalled.addListener(() => {
-    chrome.action.setBadgeText({
-      text: 'OFF'
-    });
-  });
+async function getTab() {
+    let queryOptions = { active: true, currentWindow: true };
+    let tabs = await chrome.tabs.query(queryOptions);
+    return tabs[0].url;
+};
 
-chrome.action.onClicked.addListener(async (tab) => {
-    console.log("   Plug in logs    ")
-    console.log(tab);
-    console.log(tab.url);
+chrome.tabs.onUpdated.addListener(async function () {
+    console.log("TAB UPDATED");
+    let url = await getTab();
+    console.log(url);
     return true;
 });
+
+//Make sure to check service worker logs to see the current URL being logged and not the browser logs
+//You can access service worker logs by clicking on the service worker link when reloading the extension
