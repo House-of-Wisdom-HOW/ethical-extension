@@ -4,7 +4,7 @@ async function getTab() {
     return tabs[0].url;
 };
 
-chrome.tabs.onUpdated.addListener(async function () {
+chrome.tabs.onActivated.addListener(async function () {
     console.log("TAB UPDATED");
     let url = await getTab();
     console.log(url);
