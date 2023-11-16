@@ -1,6 +1,6 @@
 async function getTabInfo() {
-    let queryOptions = { active: true, currentWindow: true };
-    let tabs = await chrome.tabs.query(queryOptions);
+    const queryOptions = { active: true, currentWindow: true };
+    const tabs = await chrome.tabs.query(queryOptions);
     const tab = tabs[0];
     const tabUrl = tab.url;
     const tabDomain = domain = tabUrl.replace('http://', '').replace('https://', '').replace('www.','').split(/[/?#]/)[0];
@@ -8,7 +8,7 @@ async function getTabInfo() {
 };
 
 function generateModal(companyName, companyEthicacy) {
-    var couponDisplay = document.createElement('div');
+    const couponDisplay = document.createElement('div');
     couponDisplay.className = '_coupon__list';
     couponDisplay.innerHTML = `<h1>${companyName}</h1><p>${companyEthicacy}</p>`;
     couponDisplay.style.display = 'block';
