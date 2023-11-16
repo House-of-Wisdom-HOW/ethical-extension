@@ -3,18 +3,13 @@
   "name": "Ethical Extension",
   "description": "An extension which determines if the current link is ethical or not",
   "version": "1.0",
-  "permissions": ["activeTab", "tabs"],
+  "permissions": ["activeTab", "scripting", "tabs"],
+  "host_permissions": ["*://*/"],
   "background": {
     "service_worker": "service-worker.js"
   },
   "action": {
     "default_icon": "hello_extensions.png",
     "default_title": "Ethical Extension"
-  },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content-script.js"]
-    }
-  ]
+  }
 }

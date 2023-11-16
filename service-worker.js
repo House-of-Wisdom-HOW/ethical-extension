@@ -1,17 +1,22 @@
-async function getTab() {
+async function getTabId() {
     let queryOptions = { active: true, currentWindow: true };
     let tabs = await chrome.tabs.query(queryOptions);
-    return tabs.length > 0 ? tabs[0] : undefined;
+    return tabs[0].id;
 };
 
 chrome.tabs.onActivated.addListener(async function () {
     console.log("TAB UPDATED");
-    let tab = await getTab();
-    if (tab) {
-        console.log("service-worker", tab);
-        const response = await chrome.tabs.sendMessage(tab.id, {tabUrl: tab.url});
-        console.log('response', response);
-    }
+    const tabId = await getTabId();
+    chrome.scripting.executeScript({
+      target : {tabId: tabId},
+      files : [ "content-script.js" ],
+    })
+    .then(() => console.log("script injected"))
+    .then(() => chrome.scripting.insertCSS(
+        {target: {tabId: tabId},
+        files: ["coupon.css"]}
+    ))
+    .catch((err) => console.log("err", err));
 });
 
 //Make sure to check service worker logs to see the current URL being logged and not the browser logs
