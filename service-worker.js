@@ -4,12 +4,22 @@ async function getTabId() {
     return tabs[0].id;
 };
 
+function generateModal(companyName, companyEthicacy) {
+    var couponDisplay = document.createElement('div');
+    var couponHTML = '<p>Be the first to submit a coupon for this site</p>';
+    couponDisplay.className = '_coupon__list';
+    couponDisplay.innerHTML = `<h1>${companyName}</h1><p>${companyEthicacy}</p>`;
+    couponDisplay.style.display = 'block';
+    document.body.appendChild(couponDisplay);
+}
+
 chrome.tabs.onActivated.addListener(async function () {
     console.log("TAB UPDATED");
     const tabId = await getTabId();
     chrome.scripting.executeScript({
       target : {tabId: tabId},
-      files : [ "content-script.js" ],
+      func : generateModal,
+      args: ["Amazon", "This company is very ethical"]
     })
     .then(() => console.log("script injected"))
     .then(() => chrome.scripting.insertCSS(
