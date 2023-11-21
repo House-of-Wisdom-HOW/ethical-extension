@@ -9,7 +9,7 @@
     "service_worker": "service-worker.js"
   },
   "action": {
-    "default_icon": "hello_extensions.png",
+    "default_icon": "base_icon.png",
     "default_title": "Ethical Extension"
   }
 }

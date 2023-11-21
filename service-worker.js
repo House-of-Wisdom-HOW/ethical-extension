@@ -15,7 +15,11 @@ function generateModal(companyName, companyEthicacy) {
     document.body.appendChild(couponDisplay);
 }
 
-chrome.tabs.onActivated.addListener(async function () {
+function hideModal(){
+    couponDisplay.style.display = 'none';
+}
+
+async function displayModal() {
     console.log("TAB UPDATED");
     const [tabId, tabDomain] = await getTabInfo();
     chrome.scripting.executeScript({
@@ -29,6 +33,10 @@ chrome.tabs.onActivated.addListener(async function () {
         files: ["coupon.css"]}
     ))
     .catch((err) => console.log("err", err));
+}
+
+chrome.tabs.onActivated.addListener(async function () {
+    console.log("TAB UPDATED");
 });
 
 //Make sure to check service worker logs to see the current URL being logged and not the browser logs
