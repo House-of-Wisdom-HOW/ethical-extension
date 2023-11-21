@@ -3,7 +3,7 @@ async function getTabInfo() {
     const tabs = await chrome.tabs.query(queryOptions);
     const tab = tabs[0];
     const tabUrl = tab.url;
-    const tabDomain = domain = tabUrl.replace('http://', '').replace('https://', '').replace('www.','').split(/[/?#]/)[0];
+    const tabDomain = tabUrl.replace('http://', '').replace('https://', '').replace('www.','').split(/[/?#]/)[0];
     return [tab.id, tabDomain];
 };
 
@@ -35,8 +35,45 @@ async function displayModal() {
     .catch((err) => console.log("err", err));
 }
 
+function getDomainEthicacyLevel(tabDomain) {
+    console.log('tabDomain', tabDomain);
+    const dummyMap = {
+        'google.com': 3,
+        'amazon.com': 2,
+        'twitter.com': 1
+    }
+    if (dummyMap[tabDomain]) {
+        return dummyMap[tabDomain]
+    };
+    return 1;
+}
+
+function updateExtensionIcon(tabDomain) {
+    const ethicacyLevel = getDomainEthicacyLevel(tabDomain);
+    console.log('ethicacyLevel', ethicacyLevel);
+    if (ethicacyLevel == 1) {
+        chrome.action.setIcon({
+            path: "green_square.png"
+        })
+    } else {
+        chrome.action.setIcon({
+            path: "yellow_square.png"
+        })
+    }
+}
+
+// adds a listener to detect tab change
 chrome.tabs.onActivated.addListener(async function () {
-    console.log("TAB UPDATED");
+    const [tabId, tabDomain] = await getTabInfo();
+    updateExtensionIcon(tabDomain);
+});
+
+// adds a listener to detect url change
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.url) {
+        const newDomain = changeInfo.url.replace('http://', '').replace('https://', '').replace('www.','').split(/[/?#]/)[0];
+        updateExtensionIcon(newDomain);
+    }
 });
 
 //Make sure to check service worker logs to see the current URL being logged and not the browser logs
